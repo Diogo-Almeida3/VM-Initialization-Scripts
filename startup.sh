@@ -1,3 +1,6 @@
+# Use pip  when dependency will be used for development (E.g pwntools)
+# Use pipx when dependency will be used for the application (E.g impacket)
+
 echo "Updating System"
 sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y
 echo "Ensure wget and gpg installation"
@@ -11,11 +14,9 @@ sudo apt install bloodhound -y
 echo "Install pipx"
 sudo apt install pipx -y
 echo "Install NetExec"
-git clone https://github.com/Pennyw0rth/NetExec.git && cd netexec && pipx install . -y
+rm ~/NetExec/ && git clone https://github.com/Pennyw0rth/NetExec.git && cd NetExec && pipx install . -y && cd .. && rm -rf ~/NetExec/
 echo "Ensuring smooth crypto operations - Fix OScrypto"
-pip uninstall oscrypto -y && pipx install git+https://github.com/wbond/oscrypto.git && pipx install impacket minikerberos --force && sudo updatedb
-echo "Tune Impacket with MSADA_GUIDS - Used to interact with identified AD objects"
-wget https://raw.githubusercontent.com/byt3bl33d3r/CrackMapExec/master/cme/helpers/msada_guids.py && chmod +x msada_guids.py && cp msada_guids.py /home/kali/.local/share/pipx/venvs/impacket/bin/ && cp msada_guids.py /home/kali/.local/share/pipx/venvs/impacket/lib/python3.11/site-packages/impacket/ && sudo cp msada_guids.py /usr/lib/python3/dist-packages/impacket/ && sudo cp msada_guids.py /usr/lib/python3/dist-packages/scapy/layers/
+~/python_venv/bin/pip uninstall oscrypto -y && pipx install git+https://github.com/wbond/oscrypto.git && pipx install impacket minikerberos --force && sudo updatedb
 echo "Tune Pipx with ensurepath and completions"
 pipx ensurepath && pipx completions
 echo "Put bloodhound trough pipx"
@@ -34,3 +35,12 @@ sudo apt update
 sudo apt install code -y
 echo "Ensure BurpSuite instalation"
 sudo apt install burpsuite -y
+echo "Install BinUtils"
+sudo apt install -y binutils
+echo "Install Pwn Tools and Angr"
+~/python_venv/bin/pip install --upgrade angr
+~/python_venv/bin/pip install --upgrade pwntools
+echo "Install Volatility3"
+pipx install volatility3
+echo "Retrieve Seclists"
+rm -rf SecList.zip && wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O seclists.zip && unzip seclists.zip && rm -f seclists.zip && sudo mv SecLists-master /usr/share/wordlists/seclists
