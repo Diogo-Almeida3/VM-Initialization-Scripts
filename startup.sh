@@ -44,3 +44,27 @@ echo "Install Volatility3"
 pipx install volatility3
 echo "Retrieve Seclists"
 rm -rf SecList.zip && wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O seclists.zip && unzip seclists.zip && rm -f seclists.zip && sudo mv SecLists-master /usr/share/wordlists/seclists
+
+echo "Prepare GDB-GEF"
+bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
+mv ~/.gef-2025.01.py ~/.gdbinit-gef.py
+# python ~/.gdbinit-gef.py --update
+cat << EOF > ~/.gdbinit
+define init-gef
+source ~/.gdbinit-gef.py
+end
+document init-gef
+Initializes GEF (GDB Enhanced Features)
+end
+EOF
+
+sudo bash -c 'cat > /usr/bin/gdb-gef <<EOF
+#!/bin/sh
+exec gdb -q -ex init-gef "\$@"
+EOF'
+
+sudo chmod +x /usr/bin/gdb-gef
+
+echo "Finished"
+
+
