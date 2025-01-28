@@ -60,10 +60,18 @@ EOF
 
 sudo bash -c 'cat > /usr/bin/gdb-gef <<EOF
 #!/bin/sh
+VENV_PATH="~/python_venv"
+export PYTHONHOME="$VENV_PATH"
+export PYTHONPATH="$VENV_PATH/lib/python3.12/site-packages"
+
 exec gdb -q -ex init-gef "\$@"
 EOF'
 
 sudo chmod +x /usr/bin/gdb-gef
+
+echo "Add gef-extras"
+wget -q -O- https://github.com/Diogo-Almeida3/VM-Initialization-Scripts/blob/main/adapted-gef-extras.sh | sh
+deactivate
 
 echo "Finished"
 
